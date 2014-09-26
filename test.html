@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+   var fn =  function createCounter(){
+        var counter = 0;
+        return function(){
+            return counter++;
+        }
+    }();
+
+   // var fn = createCounter();
+    console.log(window.document.body.innerHTML);
+    window.document.body.innerHTML += '<p>'+fn()+'</p>';
+    window.document.body.innerHTML += '<p>'+fn()+'</p>';
+    window.document.body.innerHTML += '<p>'+fn()+'</p>';
+    window.document.body.innerHTML += '<p>'+(fn()+1)+'</p>';
+</script>
+</body>
+</html>

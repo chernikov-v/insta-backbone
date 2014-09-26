@@ -1,0 +1,23 @@
+<div class="panel-body" ng-show="showComment(image)">
+    <hr/>
+
+    <div class="show-more">
+        <i>
+                    <span ng-click="moreComments(image)"
+                          ng-if="image.myComments.length > 3">{{image.myComments.length - moreCommentsShow(image)}} more comments</span>
+        </i>
+    </div>
+
+    <div class="media" ng-repeat="comment in image.myComments"
+         ng-if="$index < moreCommentsShow(image)">
+        <a class="pull-left" href="#">
+            <img class="media-object comments-ava" ng-src="{{comment.user_image}}" alt="{{comment.user_name}}">
+        </a>
+
+        <div class="media-body">
+
+            <caption-tags text="@{{comment.user_name}}: {{comment.text}}"></caption-tags>
+
+        </div>
+    </div>
+</div>

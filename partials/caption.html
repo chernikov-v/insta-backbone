@@ -1,0 +1,19 @@
+<div class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object comments-ava" ng-src="{{image.user.profile_picture}}"
+             alt="{{image.user.username}}">
+
+    </a>
+
+    <div class="media-body">
+        <h5 class="media-heading tag-class">
+                        <span onclick="focusToInput(this)"
+                              ng-click="image.tempText = '@'+image.user.username + ': '">
+                        @{{image.user.username}}
+                        </span>:
+        </h5>
+
+        <caption-tags text="{{image.caption.text}}"></caption-tags>
+
+    </div>
+</div>

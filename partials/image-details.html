@@ -1,0 +1,55 @@
+<div class="row details-block set-shadow ">
+    <!--=====================================================================================================-->
+    <!--Изображение-->
+    <!--=====================================================================================================-->
+    <div class="details-image col-md-8">
+        <img class="img-responsive" ng-src="{{image.images.standard_resolution.url}}">
+    </div>
+    <!--=====================================================================================================-->
+    <!--Описание-->
+    <!--=====================================================================================================-->
+    <div class="details-caption-block col-md-4 panel image-block">
+
+        <div class="details-caption panel-body">
+
+            <div caption></div>
+
+        </div>
+        <!--=====================================================================================================-->
+        <!--Комментарии-->
+        <!--=====================================================================================================-->
+        <hr/>
+        <div class="details-comments press panel-body">
+            <span class="details-comments-nocomments like-panel-text" ng-show="!image.myComments.length"><i>Нет
+                комментариев...</i></span>
+
+            <div class="media" ng-repeat="comment in image.myComments">
+                <a class="pull-left" href="#">
+                    <img class="media-object comments-ava" ng-src="{{comment.user_image}}" alt="{{comment.user_name}}">
+                </a>
+
+                <div class="media-body">
+                    <caption-tags text="@{{comment.user_name}}: {{comment.text}}"></caption-tags>
+                </div>
+            </div>
+            <!--=====================================================================================================-->
+            <!--Поле ввода комментария-->
+            <!--=====================================================================================================-->
+            <div class="details-footer panel-footer width-100" ng-controller="addCommentCtrl">
+                <form class="form-inline pull-right width-100">
+                    <div class="input-group">
+                        <input class="form-control commentsField" type="text" ng-model="image.tempText"
+                               placeholder="Leave a comment..."/>
+
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default"
+                                    ng-click="addComment(image,image.tempText)">...
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

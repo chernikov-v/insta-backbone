@@ -1,0 +1,10 @@
+<div class="like-panel-padding-zero panel-heading">
+    <div ng-init="likeInit(image.likes)" ng-class="likeStyleSet(image.likes)"
+         ng-mousedown="likePress(image.likes)"
+         ng-mouseup="addLike(image.likes)">
+                <span class="like-panel-heart">
+                   &hearts;
+               </span>
+    </div>
+    <span class="like-panel-text">{{image.likes.count}} people like this</span>
+</div>
