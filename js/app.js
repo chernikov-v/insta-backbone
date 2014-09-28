@@ -5,7 +5,8 @@ define([
 ], function (imageList, searchPanel, photoItem) {
 
     var app = sessionStorage;
-       setLocalStorage = function(){
+    console.log(app.length);
+    var setStorage = function () {
         return {
             View: {
                 Image: {},
@@ -23,9 +24,9 @@ define([
         }
 
     };
-    app = setLocalStorage();
-
-
+    if (app.length == 0) {
+        app = setStorage();
+    }
     /*********************************************************************************************************************************/
     /*
      LIST PAGE VIEW
@@ -49,8 +50,7 @@ define([
     app.Model.Image = Backbone.Model.extend({
         initialize: function () {
             console.log('Initialize MODEL');
-            var test = new app.View.Image({model: this});
-
+            var view = new app.View.Image({model: this});
         }
     });
     /*********************************************************************************************************************************/
@@ -72,7 +72,7 @@ define([
         }, getNext: function (props) {
 
         }, parse: function (response) {
-            console.log('THIS IS PARSE FUNCTION  - ', response.data);
+            console.log('initialize data from server  - ', response.data);
             return response.data;
         }
     });
@@ -89,19 +89,20 @@ define([
             console.log('модель --- ', this.model.get('id'));
             this.render();
         },
-        event: {
-            'submit': function (e) {
+        events: {
+            'submit .comment': function (e) {
                 e.preventDefault();
+
                 console.log(e);
             }
         },
         render: function () {
-
             this.$el.append(this.template(this.model.attributes));
-            this.$el.find('.timeago').timeago();
-            console.log(this.$el.find('.timeago').timeago());
+            //this.$el.find('.timeago').timeago();
+            //console.log(this.$el.find('.timeago').timeago());
             return this;
         }
+
     });
     /*********************************************************************************************************************************/
     /*
@@ -120,14 +121,32 @@ define([
                 e.preventDefault();
                 console.log('SUBMIT');
                 var col = new app.Colleсtion.Images().getImages({hashtag: this.$el.find('input').val(), count: 5});
-            }
+                var button = new app.View.Button({collection: col});
 
+            }
         },
         render: function () {
             this.$el.append(this.template);
         }
     });
+
+    app.View.Button = Backbone.View.extend({
+        el: "#more-button",
+        template: "<button  type='button' class='center-block btn btn-default'>Load more... </button>",
+        initialize: function () {
+            this.collection.on('fetch', this.render());
+        },
+        events: {
+            'click button': function () {
+                alert('HELLO!!!');
+            }
+        },
+        render: function () {
+            this.$el.html(this.template);
+        }
+    });
     var imgList = new app.View.Images();
+
     var searchView = new app.View.Search();
 
     return{

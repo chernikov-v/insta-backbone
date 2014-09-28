@@ -61,10 +61,9 @@
                 <!--========================================================================================================================-->
                 <!--Футер-панель для введения комментариев-->
                 <!--========================================================================================================================-->
-                <div class="panel-footer" ng-controller="addCommentCtrl">
-                    <form>
-                        <input class="form-control commentsField" type="text" ng-model="model.tempText"
-                               placeholder="Write a comment..."/>
+                <div class="panel-footer">
+                    <form class="comment">
+                        <input class="form-control commentsField" type="text" placeholder="Write a comment..."/>
                         <button type="submit" class="hidden-submit" value="submit"
                                 ng-click="addComment(image,image.tempText)">
                         </button>
