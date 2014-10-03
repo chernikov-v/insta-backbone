@@ -1,8 +1,11 @@
 define([
+    'jquery',
+    'underscore',
+    'backbone',
     'text!../partials/image-list.html',
     'text!../partials/search-panel.html',
     'text!../partials/photo-item.html'
-], function (imageList, searchPanel, photoItem) {
+], function ($,_,Backbone,imageList, searchPanel, photoItem) {
 
     var app = sessionStorage;
     console.log(app.length);
