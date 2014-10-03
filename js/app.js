@@ -5,13 +5,13 @@ define([
 ], function (imageList, searchPanel, photoItem) {
 
     var app = sessionStorage;
-    console.log(app.length);
     var setStorage = function () {
         return {
             View: {
                 Image: {},
                 Images: {},
-                Search: {}
+                Search: {},
+                Collection:{}
             },
 
             Model: {
@@ -20,13 +20,25 @@ define([
 
             Colleсtion: {
                 Images: {}
+            },
+            Storage:{
+                collection:{
+                    length: 0
+                }
             }
         }
 
     };
+
     if (app.length == 0) {
         app = setStorage();
+        console.log('SET STORAGE')
     }
+    if(app.Storage.collection.length != 0)
+    {
+
+    }
+
     /*********************************************************************************************************************************/
     /*
      LIST PAGE VIEW
@@ -48,9 +60,15 @@ define([
      */
     /*********************************************************************************************************************************/
     app.Model.Image = Backbone.Model.extend({
+        liked: true,
         initialize: function () {
-            console.log('Initialize MODEL');
-            var view = new app.View.Image({model: this});
+//            console.log(this.get('id'));
+           //var view = new app.View.Image({model: this});
+        },
+        getTimeago : function(){
+            var date = new Date();
+            date.setMilliseconds(this.model.get('created_time'));
+            return jQuery.timeago(date);
         }
     });
     /*********************************************************************************************************************************/
@@ -69,14 +87,40 @@ define([
             this.fetch({dataType: 'jsonp'});
 
             return this;
-        }, getNext: function (props) {
+        }, getNext: function () {
+           this.fetch({dataType: 'jsonp',remove: false})
 
         }, parse: function (response) {
             console.log('initialize data from server  - ', response.data);
+            console.log(response);
+            this.url = response.pagination.next_url;
+           // Backbone.trigger('parse');
             return response.data;
         }
     });
+
     /*********************************************************************************************************************************/
+    /*
+     COLLECTION VIEW
+     */
+    /*********************************************************************************************************************************/
+    app.View.Collection = Backbone.View.extend({
+        el: '#images-block',
+        template: _.template(photoItem),
+        initialize: function(){
+            console.log('COLLECTION VIEW');
+            //Backbone.on('parse',this.collection.each(this.renderEach, this),this);
+        },
+        renderEach: function(md){
+            //console.log(model);
+            //this.$el.append(this.template(model.attributes));
+            var modelView = new app.View.Image({model: md});
+            //return this;
+        }
+
+    });
+
+     /*********************************************************************************************************************************/
     /*
      IMAGES VIEW
      */
@@ -85,28 +129,32 @@ define([
         el: '#images-block',
         template: _.template(photoItem),
         initialize: function () {
-            console.log('Initialize IMAGE VIEW');
-            console.log('модель --- ', this.model.get('id'));
+
             this.render();
         },
-        events: {
-            'submit .comment': function (e) {
-                e.preventDefault();
-
-                console.log(e);
-            }
-        },
         render: function () {
-            this.$el.append(this.template(this.model.attributes));
-            //this.$el.find('.timeago').timeago();
-            //console.log(this.$el.find('.timeago').timeago());
+
+            this.$el.append(this.template(this.model.toJSON()));
+
             return this;
         }
+    });
 
+    /*********************************************************************************************************************************/
+    app.View.ImageComments = Backbone.View.extend({
+        el:'#images-block',
+        events: {
+            'submit .comment':function (evt) {
+                evt.preventDefault();
+                console.log($(evt.currentTarget).find('input').val());
+                $(evt.currentTarget).find('input').val('hello');
+
+            }
+        }
     });
     /*********************************************************************************************************************************/
     /*
-     View the SEARCH PANEL
+     View the SEARCH
      */
     /*********************************************************************************************************************************/
     app.View.Search = Backbone.View.extend({
@@ -114,21 +162,28 @@ define([
         template: _.template(searchPanel),
         initialize: function () {
             this.render();
-
+            console.log('init SEARCH VIEW');
         },
         events: {
-            'submit #search': function (e) {
-                e.preventDefault();
-                console.log('SUBMIT');
-                var col = new app.Colleсtion.Images().getImages({hashtag: this.$el.find('input').val(), count: 5});
-                var button = new app.View.Button({collection: col});
+            'submit #search': 'search'
+        },
+        search: function (e) {
+            e.preventDefault();
+            console.log('SUBMIT');
+            app.Storage.collection = new app.Colleсtion.Images().getImages({hashtag: this.$el.find('input').val(), count: 5});
+            var colview = new app.View.Collection({collection: app.Storage.collection});
+            var button = new app.View.Button({collection: app.Storage.collection});
 
-            }
         },
         render: function () {
             this.$el.append(this.template);
         }
     });
+    /*********************************************************************************************************************************/
+    /*
+     View the NEXT BUTTON
+     */
+    /*********************************************************************************************************************************/
 
     app.View.Button = Backbone.View.extend({
         el: "#more-button",
@@ -138,16 +193,18 @@ define([
         },
         events: {
             'click button': function () {
-                alert('HELLO!!!');
+             app.Storage.collection.getNext();
+                console.log(app.Storage.collection)
             }
         },
         render: function () {
             this.$el.html(this.template);
         }
     });
-    var imgList = new app.View.Images();
 
+    var imgList = new app.View.Images();
     var searchView = new app.View.Search();
+    var imagesComment = new app.View.ImageComments();
 
     return{
         initialize: function () {
