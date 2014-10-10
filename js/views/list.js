@@ -2,21 +2,23 @@
  * Created by vladimir on 09.10.14.
  */
 define([
-        'text!../partials/image-list.html'
-
-    ], function( imagesList ){
-        var viewImages = Backbone.View.extend({
+    'backbone',
+    'viewsSearch',
+    'text!../partials/image-list.html'
+    ], function( Backbone, ViewsSearch, imagesList ){
+        var ViewImages = Backbone.View.extend({
             el: '#main-block',
             template: _.template(imagesList),
             initialize: function () {
                 this.list_view();
+                var viewSearch = new ViewsSearch();
             },
             list_view: function () {
                 this.$el.html(this.template);
             }
         });
 
-    return viewImages;
+    return ViewImages;
     });
 
 /*

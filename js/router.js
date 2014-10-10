@@ -9,7 +9,7 @@ define([
     'viewsList',
     'viewsOne'
 
-], function ($, _, Backbone, List, One) {
+], function ($, _, Backbone, ViewsList, One) {
 
     var Router = Backbone.Router.extend({
 
@@ -22,7 +22,7 @@ define([
                 '*other': 'defaultAction'
             },
         viewList: function () {
-               var list = new List();
+               var list = new ViewsList();
                 console.log('IMAGES PAGE OPENED')
             },
         viewOne: function (id) {

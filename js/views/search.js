@@ -3,12 +3,14 @@
  */
 define([
     'collectionsImages',
+    'viewsImages',
+    'viewsMoreButton',
     'text!../partials/search-panel.html'
-],function( CollectionsImages ,searchPanel ){
+], function (CollectionsImages, ViewImages, ViewMoreButton, searchPanelTpl) {
 
     var Search = Backbone.View.extend({
         el: '#search-block',
-        template: _.template(searchPanel),
+        template: _.template(searchPanelTpl),
         initialize: function () {
             this.render();
             console.log('init SEARCH VIEW');
@@ -21,11 +23,11 @@ define([
             console.log('SUBMIT');
             this.clear();
             var collectionsImages = new CollectionsImages()
-                .getImages( {
+                .getImages({
                     hashtag: this.$el.find('input').val(), count: 5
                 });
             var viewImages = new ViewImages({ collection: collectionsImages });
-            var viewButton = new app.View.Button({ collection: collectionsImages });
+            var viewMoreButton = new ViewMoreButton({ collection: collectionsImages });
 
         },
         clear: function () {
@@ -33,9 +35,7 @@ define([
         },
         render: function () {
             this.$el.append(this.template);
-
         }
-
     });
 
     return Search;

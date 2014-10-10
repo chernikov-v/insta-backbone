@@ -13,8 +13,9 @@ require.config({
         viewsList: 'views/list',
         viewsOne: 'views/one',
         viewsSearch: 'views/search',
-        viewsImage: 'views/viewImage',
-        viewsImages: 'views/viewImages'
+        viewsImage: 'views/Image',
+        viewsImages: 'views/Images',
+        viewsMoreButton: 'views/MoreButton'
     }
 });
 
